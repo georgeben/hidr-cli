@@ -1,0 +1,24 @@
+{
+  "name": "hidr",
+  "version": "1.0.0",
+  "description": "A CLI tool for securely sharing secrets",
+  "main": "index.js",
+  "bin": {
+    "hidr": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "secrets",
+    "credentials",
+    "share"
+  ],
+  "author": "georgeben",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^13.1.0",
+    "isbinaryfile": "^5.0.4",
+    "ms": "^2.1.3"
+  }
+}
