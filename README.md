@@ -91,7 +91,7 @@ This will generate a secret that can only be viewed by the user with the given `
 
 ## Examples
 
-### Share a secret with a 1-hour expiration that can only be viewed once
+Share a secret with a 1-hour expiration that can only be viewed once
 
 ```sh
 npx hidr share "super-secure-code" -t 1h -l 1
@@ -104,7 +104,7 @@ To view this secret, run:
 npx hidr view abc123def456
 ```
 
-### Retrieve the secret:
+Retrieve the secret:
 
 ```sh
 npx hidr view abc123def456
