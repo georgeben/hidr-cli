@@ -2,11 +2,10 @@ const crypto = require("crypto");
 
 const ALGORITHM = "aes-256-gcm";
 
-function encrypt(content) {
+function encrypt({ content, publicKey }) {
   const encryptionKey = crypto.randomBytes(16);
   const iv = crypto.randomBytes(12);
 
-  // Create cipher and encrypt the content
   const cipher = crypto.createCipheriv(
     ALGORITHM,
     Buffer.concat([encryptionKey, encryptionKey]),
@@ -16,13 +15,19 @@ function encrypt(content) {
   encryptedContent += cipher.final("hex");
   const authTag = cipher.getAuthTag().toString("hex");
 
-  // Combine IV, encrypted content and auth tag into final payload
   const payload = {
     iv: iv.toString("hex"),
     content: encryptedContent,
     tag: authTag,
     key: encryptionKey.toString("hex"),
   };
+
+  if (publicKey) {
+    const encryptedKey = crypto
+      .publicEncrypt(publicKey, encryptionKey)
+      .toString("hex");
+    payload.key = encryptedKey;
+  }
 
   return payload;
 }
@@ -44,7 +49,45 @@ function decrypt(payload) {
   return decryptedContent;
 }
 
+function generateKeyPair() {
+  const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
+    modulusLength: 2048,
+    publicKeyEncoding: {
+      type: "spki",
+      format: "pem",
+    },
+    privateKeyEncoding: {
+      type: "pkcs8",
+      format: "pem",
+    },
+  });
+
+  return { publicKey, privateKey };
+}
+
+function rsaDecrypt(privateKey, content) {
+  try {
+    const decrypted = crypto.privateDecrypt(
+      privateKey,
+      Buffer.from(content, "hex")
+    );
+    return decrypted.toString("hex");
+  } catch (error) {
+    throw new Error("Failed to view secret");
+  }
+}
+
+function rsaSign(privateKey, content) {
+  const signer = crypto.createSign("RSA-SHA256");
+  signer.update(content);
+  signer.end();
+  return signer.sign(privateKey, "base64");
+}
+
 module.exports = {
   encrypt,
   decrypt,
+  generateKeyPair,
+  rsaDecrypt,
+  rsaSign,
 };

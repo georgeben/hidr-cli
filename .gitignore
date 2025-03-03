@@ -31,3 +31,6 @@ coverage/
 *.pem
 .npm
 .eslintcache 
+
+# Build output
+dist/
