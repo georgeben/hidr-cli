@@ -4,7 +4,7 @@
   "description": "A CLI tool for securely sharing secrets",
   "main": "dist/index.js",
   "bin": {
-    "hidr": "./dist/index.js"
+    "hidr": "dist/index.js"
   },
   "scripts": {
     "build": "rollup -c",
